@@ -1229,84 +1229,6 @@
       .whatsapp-float i { font-size: 1.3rem; }
       .whatsapp-cta-box { flex-direction: column; align-items: flex-start; }
     }
-
-    /* ============================================================
-       CONTROLE DE TAMANHO DE FONTE — WCAG 1.4.4
-       Aplica-se em :root; todo rem escala proporcionalmente.
-    ============================================================ */
-    html[data-font="normal"] { font-size: 100%; }   /* 16px base */
-    html[data-font="large"]  { font-size: 112.5%; } /* 18px base */
-    html[data-font="larger"] { font-size: 125%; }   /* 20px base */
-
-    /* Widget de controle de fonte */
-    .font-size-ctrl {
-      display: flex;
-      align-items: center;
-      gap: 4px;
-      background: var(--theme-btn-bg);
-      border: 1px solid var(--theme-btn-border);
-      border-radius: 20px;
-      padding: 4px 6px;
-    }
-
-    .font-size-ctrl__label {
-      font-family: 'Oswald', sans-serif;
-      font-size: 0.72rem;
-      font-weight: 600;
-      letter-spacing: 0.1em;
-      text-transform: uppercase;
-      color: var(--theme-btn-color);
-      padding: 0 6px 0 4px;
-      white-space: nowrap;
-      user-select: none;
-    }
-
-    .font-size-ctrl__btn {
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      width: 32px;
-      height: 32px;
-      border-radius: 50%;
-      border: none;
-      background: transparent;
-      color: var(--theme-btn-color);
-      font-family: 'Oswald', sans-serif;
-      font-weight: 700;
-      cursor: pointer;
-      transition: background 0.2s ease, color 0.2s ease;
-      position: relative;
-      flex-shrink: 0;
-    }
-
-    .font-size-ctrl__btn:hover,
-    .font-size-ctrl__btn:focus-visible {
-      background: var(--red);
-      color: #fff;
-    }
-
-    .font-size-ctrl__btn:disabled {
-      opacity: 0.3;
-      cursor: not-allowed;
-      pointer-events: none;
-    }
-
-    /* Rótulo "A" escalado para indicar nível */
-    .font-size-ctrl__btn .fa-small { font-size: 0.78rem; }
-    .font-size-ctrl__btn .fa-mid   { font-size: 0.95rem; }
-    .font-size-ctrl__btn .fa-big   { font-size: 1.15rem; }
-
-    /* Indicador visual do nível ativo */
-    .font-size-ctrl__btn[aria-pressed="true"] {
-      background: var(--red);
-      color: #fff;
-    }
-
-    /* Ocultar label de texto no mobile — mantém ícones */
-    @media (max-width: 768px) {
-      .font-size-ctrl__label { display: none; }
-      .font-size-ctrl { padding: 4px; }
-    }
   </style>
 </head>
 <body>
@@ -1351,35 +1273,6 @@
           </li>
         </ul>
       </nav>
-
-      <!-- Controle de tamanho de fonte — WCAG 1.4.4 -->
-      <div class="font-size-ctrl" role="group" aria-label="Tamanho da fonte">
-        <span class="font-size-ctrl__label" aria-hidden="true">Fonte</span>
-        <button class="font-size-ctrl__btn"
-                id="font-normal"
-                data-size="normal"
-                aria-label="Tamanho de fonte normal"
-                aria-pressed="true"
-                title="Fonte normal">
-          <span class="fa-small" aria-hidden="true">A</span>
-        </button>
-        <button class="font-size-ctrl__btn"
-                id="font-large"
-                data-size="large"
-                aria-label="Tamanho de fonte grande"
-                aria-pressed="false"
-                title="Fonte grande">
-          <span class="fa-mid" aria-hidden="true">A</span>
-        </button>
-        <button class="font-size-ctrl__btn"
-                id="font-larger"
-                data-size="larger"
-                aria-label="Tamanho de fonte maior"
-                aria-pressed="false"
-                title="Fonte maior">
-          <span class="fa-big" aria-hidden="true">A</span>
-        </button>
-      </div>
 
       <button id="theme-toggle" aria-label="Alternar para tema claro" aria-pressed="false">
         <i class="fas fa-sun" aria-hidden="true"></i>
@@ -1767,140 +1660,95 @@
        JAVASCRIPT
   ====================================================== -->
   <script>
-  /* ============================================================
-     PANTERA ACADEMIA — scripts de acessibilidade e UX
-     Ordem correta: declarações globais primeiro.
-  ============================================================ */
+    /* --------------------------------------------------------
+       TEMA CLARO / ESCURO
+       - Persiste no localStorage
+       - Sincroniza com prefers-color-scheme do SO
+       - aria-pressed correto no botão — WCAG 4.1.2
+    -------------------------------------------------------- */
+    const html       = document.documentElement;
+    const themeBtn   = document.getElementById('theme-toggle');
+    const themeIcon  = themeBtn.querySelector('i');
+    const themeLabel = themeBtn.querySelector('.theme-label');
+    const prefersDark = window.matchMedia('(prefers-color-scheme: dark)');
 
-  /* 1. Referência global ao <html> — usada por TODOS os módulos */
-  const html = document.documentElement;
-
-  /* ─────────────────────────────────────────────────────────────
-     2. TAMANHO DE FONTE — WCAG 1.4.4
-     Aplica data-font no <html>; todo rem da página escala junto.
-     Persiste no localStorage; anuncia via aria-live.
-  ───────────────────────────────────────────────────────────── */
-  const FONT_LEVELS = ['normal', 'large', 'larger'];
-  const fontBtns    = document.querySelectorAll('.font-size-ctrl__btn');
-
-  function applyFontSize(size) {
-    if (!FONT_LEVELS.includes(size)) size = 'normal';
-    html.setAttribute('data-font', size);
-    localStorage.setItem('pantera-font', size);
-
-    fontBtns.forEach(btn => {
-      btn.setAttribute('aria-pressed', String(btn.dataset.size === size));
-    });
-
-    /* Anuncia para leitores de tela — WCAG 4.1.3 */
-    let live = document.getElementById('font-live');
-    if (!live) {
-      live = document.createElement('div');
-      live.id = 'font-live';
-      live.setAttribute('aria-live', 'polite');
-      live.setAttribute('aria-atomic', 'true');
-      live.className = 'sr-only';
-      document.body.appendChild(live);
+    function applyTheme(theme) {
+      html.setAttribute('data-theme', theme);
+      const isDark = theme === 'dark';
+      themeIcon.className   = isDark ? 'fas fa-sun' : 'fas fa-moon';
+      themeLabel.textContent = isDark ? 'Tema Claro' : 'Tema Escuro';
+      themeBtn.setAttribute('aria-label',   isDark ? 'Alternar para tema claro' : 'Alternar para tema escuro');
+      themeBtn.setAttribute('aria-pressed',  isDark ? 'false' : 'true');
+      localStorage.setItem('pantera-theme', theme);
     }
-    const nomes = { normal: 'normal', large: 'grande', larger: 'maior' };
-    /* Limpa antes de setar para forçar anúncio mesmo se igual */
-    live.textContent = '';
-    requestAnimationFrame(() => {
-      live.textContent = 'Tamanho da fonte: ' + nomes[size] + '.';
+
+    // Prioridade: salvo > preferência do SO > escuro
+    const saved = localStorage.getItem('pantera-theme');
+    applyTheme(saved ?? (prefersDark.matches ? 'dark' : 'light'));
+
+    themeBtn.addEventListener('click', () => {
+      applyTheme(html.getAttribute('data-theme') === 'dark' ? 'light' : 'dark');
     });
-  }
 
-  /* Inicializa: preferência salva → normal */
-  applyFontSize(localStorage.getItem('pantera-font') || 'normal');
-
-  fontBtns.forEach(btn => {
-    btn.addEventListener('click', () => applyFontSize(btn.dataset.size));
-  });
-
-  /* ─────────────────────────────────────────────────────────────
-     3. TEMA CLARO / ESCURO — WCAG 1.4.3
-     Persiste no localStorage; sincroniza com prefers-color-scheme.
-  ───────────────────────────────────────────────────────────── */
-  const themeBtn    = document.getElementById('theme-toggle');
-  const themeIcon   = themeBtn.querySelector('i');
-  const themeLabel  = themeBtn.querySelector('.theme-label');
-  const prefersDark = window.matchMedia('(prefers-color-scheme: dark)');
-
-  function applyTheme(theme) {
-    html.setAttribute('data-theme', theme);
-    const isDark = theme === 'dark';
-    themeIcon.className    = isDark ? 'fas fa-sun' : 'fas fa-moon';
-    themeLabel.textContent = isDark ? 'Tema Claro' : 'Tema Escuro';
-    themeBtn.setAttribute('aria-label',  isDark ? 'Alternar para tema claro' : 'Alternar para tema escuro');
-    themeBtn.setAttribute('aria-pressed', isDark ? 'false' : 'true');
-    localStorage.setItem('pantera-theme', theme);
-  }
-
-  /* Inicializa: salvo → preferência do SO → escuro */
-  applyTheme(localStorage.getItem('pantera-theme') || (prefersDark.matches ? 'dark' : 'light'));
-
-  themeBtn.addEventListener('click', () => {
-    applyTheme(html.getAttribute('data-theme') === 'dark' ? 'light' : 'dark');
-  });
-
-  prefersDark.addEventListener('change', e => {
-    if (!localStorage.getItem('pantera-theme')) applyTheme(e.matches ? 'dark' : 'light');
-  });
-
-  /* ─────────────────────────────────────────────────────────────
-     4. MENU MOBILE — WCAG 2.1.1 / 4.1.2
-  ───────────────────────────────────────────────────────────── */
-  const hamburger = document.getElementById('hamburger');
-  const mobileNav = document.getElementById('mobileNav');
-
-  hamburger.addEventListener('click', () => {
-    const isOpen = mobileNav.classList.toggle('open');
-    hamburger.classList.toggle('open', isOpen);
-    hamburger.setAttribute('aria-expanded', String(isOpen));
-    hamburger.setAttribute('aria-label', isOpen ? 'Fechar menu de navegação' : 'Abrir menu de navegação');
-    mobileNav.setAttribute('aria-hidden', String(!isOpen));
-    document.body.style.overflow = isOpen ? 'hidden' : '';
-    if (isOpen) mobileNav.querySelector('a').focus();
-  });
-
-  function closeMobileNav() {
-    mobileNav.classList.remove('open');
-    hamburger.classList.remove('open');
-    hamburger.setAttribute('aria-expanded', 'false');
-    hamburger.setAttribute('aria-label', 'Abrir menu de navegação');
-    mobileNav.setAttribute('aria-hidden', 'true');
-    document.body.style.overflow = '';
-    hamburger.focus();
-  }
-
-  /* Fecha com Escape — WCAG 2.1.2 */
-  document.addEventListener('keydown', e => {
-    if (e.key === 'Escape' && mobileNav.classList.contains('open')) closeMobileNav();
-  });
-
-  /* ─────────────────────────────────────────────────────────────
-     5. HEADER — sombra ao rolar
-  ───────────────────────────────────────────────────────────── */
-  const header = document.getElementById('header');
-  window.addEventListener('scroll', () => {
-    header.classList.toggle('scrolled', window.scrollY > 40);
-  }, { passive: true });
-
-  /* ─────────────────────────────────────────────────────────────
-     6. REVEAL ON SCROLL — IntersectionObserver
-  ───────────────────────────────────────────────────────────── */
-  const revealEls = document.querySelectorAll('.reveal');
-  const revealObs = new IntersectionObserver(entries => {
-    entries.forEach(e => {
-      if (e.isIntersecting) {
-        e.target.classList.add('visible');
-        revealObs.unobserve(e.target);
-      }
+    // Segue mudança automática do SO (quando não há preferência salva)
+    prefersDark.addEventListener('change', (e) => {
+      if (!localStorage.getItem('pantera-theme')) applyTheme(e.matches ? 'dark' : 'light');
     });
-  }, { threshold: 0.12 });
 
-  revealEls.forEach(el => revealObs.observe(el));
-</script>
+    /* --------------------------------------------------------
+       MENU MOBILE — WCAG 2.1.1 / 4.1.2
+    -------------------------------------------------------- */
+    const hamburger = document.getElementById('hamburger');
+    const mobileNav = document.getElementById('mobileNav');
+
+    hamburger.addEventListener('click', () => {
+      const isOpen = mobileNav.classList.toggle('open');
+      hamburger.classList.toggle('open', isOpen);
+      hamburger.setAttribute('aria-expanded', isOpen);
+      hamburger.setAttribute('aria-label', isOpen ? 'Fechar menu de navegação' : 'Abrir menu de navegação');
+      mobileNav.setAttribute('aria-hidden', !isOpen);
+      document.body.style.overflow = isOpen ? 'hidden' : '';
+      if (isOpen) mobileNav.querySelector('a').focus();
+    });
+
+    function closeMobileNav() {
+      mobileNav.classList.remove('open');
+      hamburger.classList.remove('open');
+      hamburger.setAttribute('aria-expanded', 'false');
+      hamburger.setAttribute('aria-label', 'Abrir menu de navegação');
+      mobileNav.setAttribute('aria-hidden', 'true');
+      document.body.style.overflow = '';
+      hamburger.focus();
+    }
+
+    // Fecha com Escape — WCAG 2.1.2
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape' && mobileNav.classList.contains('open')) closeMobileNav();
+    });
+
+    /* --------------------------------------------------------
+       HEADER SCROLL SHADOW
+    -------------------------------------------------------- */
+    const header = document.getElementById('header');
+    window.addEventListener('scroll', () => {
+      header.classList.toggle('scrolled', window.scrollY > 40);
+    }, { passive: true });
+
+    /* --------------------------------------------------------
+       REVEAL ON SCROLL — IntersectionObserver
+    -------------------------------------------------------- */
+    const revealEls = document.querySelectorAll('.reveal');
+    const observer  = new IntersectionObserver((entries) => {
+      entries.forEach(e => {
+        if (e.isIntersecting) {
+          e.target.classList.add('visible');
+          observer.unobserve(e.target);
+        }
+      });
+    }, { threshold: 0.12 });
+
+    revealEls.forEach(el => observer.observe(el));
+  </script>
 
 </body>
 </html>
