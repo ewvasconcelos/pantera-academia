@@ -8,8 +8,28 @@
 
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link rel="preload" as="style" href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Oswald:wght@400;600;700&family=Montserrat:wght@300;400;500;600&display=swap" />
   <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Oswald:wght@400;600;700&family=Montserrat:wght@300;400;500;600&display=swap" rel="stylesheet" />
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
+
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "HealthClub",
+    "name": "Pantera Academia",
+    "url": "https://panteracademia.com.br",
+    "telephone": "+55-83-98638-3204",
+    "email": "contato@panteracademia.com.br",
+    "address": {
+      "@type": "PostalAddress",
+      "streetAddress": "Av. Gen. Osório, 415",
+      "addressLocality": "João Pessoa",
+      "addressRegion": "PB",
+      "addressCountry": "BR"
+    },
+    "foundingDate": "1995"
+  }
+  </script>
 
   <style>
     /* ============================================================
@@ -394,6 +414,7 @@
       display: flex;
       align-items: center;
       overflow: hidden;
+      padding-top: 80px;
     }
 
     .hero-bg {
@@ -1220,6 +1241,7 @@
       .header-logo img { height: 52px; }
 
       /* Hero */
+      #hero { padding-top: 64px; }
       .hero-title { font-size: clamp(3.2rem, 14vw, 5.5rem); }
       .hero-stats { gap: 28px; }
       .stat-number { font-size: 2rem; }
@@ -1237,6 +1259,25 @@
       .whatsapp-float { bottom: 20px; right: 20px; width: 52px; height: 52px; }
       .whatsapp-float i { font-size: 1.3rem; }
       .whatsapp-cta-box { flex-direction: column; align-items: flex-start; }
+
+      .btn-cta { width: 100%; justify-content: center; }
+
+      .map-wrap { height: 260px; }
+
+      .stat-label { font-size: 0.75rem; letter-spacing: 0.08em; }
+      .hero-stats { gap: 20px; }
+
+      #planos .section-inner { padding: 0 4%; }
+      #planos .btn-cta { margin-top: 28px; }
+      #planos p[style] { font-size: 0.85rem; }
+    }
+
+    @media (max-width: 375px) {
+      .hero-tag { letter-spacing: 0.1em; font-size: 0.8rem; padding: 5px 10px; }
+      .hero-title { font-size: clamp(2.8rem, 13vw, 4rem); }
+      .hero-stats { flex-direction: column; gap: 16px; }
+      .stat-item { flex-direction: row; align-items: center; gap: 12px; }
+      .stat-number { font-size: 1.6rem; }
     }
 
     /* ============================================================
@@ -1406,6 +1447,7 @@
         <ul class="nav-links">
           <li><a href="#historia">Nossa História</a></li>
           <li><a href="#horarios">Horários</a></li>
+          <li><a href="#planos">Planos</a></li>
           <li><a href="#contato">Contato</a></li>
           <li>
             <a href="https://www.instagram.com/panteracademia/"
@@ -1477,6 +1519,7 @@
        aria-hidden="true">
     <a href="#historia" onclick="closeMobileNav()">Nossa História</a>
     <a href="#horarios" onclick="closeMobileNav()">Horários</a>
+    <a href="#planos"   onclick="closeMobileNav()">Planos</a>
     <a href="#contato"  onclick="closeMobileNav()">Contato</a>
     <a href="https://www.instagram.com/panteracademia/"
        target="_blank" rel="noopener"
@@ -1561,8 +1604,8 @@
             <dd class="stat-number">5K+</dd>
           </div>
           <div class="stat-item">
-            <dt class="stat-label">Foco Total / Dia</dt>
-            <dd class="stat-number">3h</dd>
+            <dt class="stat-label">Aparelhos por Grupo Muscular</dt>
+            <dd class="stat-number">+12</dd>
           </div>
         </dl>
       </div>
@@ -1693,6 +1736,31 @@
     </section>
 
 
+    <!-- PLANOS -->
+    <section id="planos" class="section" aria-labelledby="planos-titulo" style="background:var(--bg-alt);">
+      <div class="section-inner" style="text-align:center;">
+        <div class="reveal">
+          <p class="section-label" aria-hidden="true">Faça Parte</p>
+          <h2 id="planos-titulo" class="section-title">Planos &amp; Preços</h2>
+          <span class="red-line center" aria-hidden="true"></span>
+        </div>
+        <div class="reveal" style="margin-top:32px;">
+          <p style="font-family:'Oswald',sans-serif;font-size:1.1rem;letter-spacing:0.12em;text-transform:uppercase;color:var(--text-muted);margin-bottom:12px;">Mensalidades a partir de</p>
+          <p style="font-family:'Bebas Neue',sans-serif;font-size:clamp(4rem,10vw,7rem);line-height:1;color:var(--red);letter-spacing:0.02em;">R$ 49<span style="font-size:0.55em;vertical-align:super;">,90</span></p>
+          <p style="font-size:0.9rem;color:var(--text-muted);margin-top:8px;">* nos planos semestrais</p>
+          <a href="https://wa.me/5583986383204"
+             target="_blank" rel="noopener"
+             class="btn-cta"
+             style="display:inline-flex;margin-top:40px;"
+             aria-label="Consultar planos no WhatsApp (abre em nova aba)">
+            <i class="fas fa-bolt" aria-hidden="true"></i>
+            Consultar Planos
+          </a>
+        </div>
+      </div>
+    </section>
+
+
     <!-- CONTATO -->
     <section id="contato" class="section" aria-labelledby="contato-titulo">
       <div class="section-inner">
@@ -1737,11 +1805,18 @@
               </div>
             </div>
 
-            <div class="map-wrap"
-                 role="img"
-                 aria-label="Localização: Av. Gen. Osório, 415, Centro, João Pessoa, PB">
-              <i class="fas fa-map-marked-alt" aria-hidden="true"></i>
-              <span>Av. Gen. Osório, 415 — João Pessoa, PB</span>
+            <div class="map-wrap" style="padding:0;overflow:hidden;border-radius:4px;">
+              <iframe
+                src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d952.4!2d-34.8853459!3d-7.1197668!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x7ace7dfda1ba331%3A0x4eee48327668a7a4!2sPantera%20Academia!5e0!3m2!1spt-BR!2sbr!4v1"
+                width="100%"
+                height="100%"
+                style="border:0;display:block;"
+                allowfullscreen=""
+                loading="lazy"
+                referrerpolicy="no-referrer-when-downgrade"
+                title="Localização da Pantera Academia no Google Maps"
+                aria-label="Mapa: Pantera Academia — Av. Gen. Osório, 415, Centro, João Pessoa, PB">
+              </iframe>
             </div>
           </address>
 
@@ -1830,6 +1905,7 @@
             <li><a href="#hero">Início</a></li>
             <li><a href="#historia">Nossa História</a></li>
             <li><a href="#horarios">Horários</a></li>
+            <li><a href="#planos">Planos</a></li>
             <li><a href="#contato">Contato</a></li>
           </ul>
         </nav>
@@ -1846,7 +1922,7 @@
     </div>
 
     <div class="footer-bottom">
-      <p>Pantera Academia <span>&copy;</span> 2025 &mdash; Todos os direitos reservados.</p>
+      <p>Pantera Academia <span>&copy;</span> <span id="footer-year">2025</span> &mdash; Todos os direitos reservados.</p>
       <p style="font-size:0.875rem;">Feito com <span aria-hidden="true">&#9829;</span><span class="sr-only">amor</span> e muito ferro.</p>
     </div>
   </footer>
@@ -1968,7 +2044,7 @@
     if (isOpen) mobileNav.querySelector('a').focus();
   });
 
-  function closeMobileNav() {
+  window.closeMobileNav = function() {
     mobileNav.classList.remove('open');
     hamburger.classList.remove('open');
     hamburger.setAttribute('aria-expanded', 'false');
@@ -2003,6 +2079,9 @@
   }, { threshold: 0.12 });
 
   document.querySelectorAll('.reveal').forEach(el => revealObs.observe(el));
+
+  /* Copyright dinâmico */
+  document.getElementById('footer-year').textContent = new Date().getFullYear();
 </script>
 
 </body>
