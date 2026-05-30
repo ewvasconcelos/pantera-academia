@@ -386,18 +386,20 @@
       display: none;
       position: fixed;
       inset: 0;
-      background: var(--mobile-nav-bg);
+      background: var(--bg-base);
       z-index: 999;
       flex-direction: column;
       align-items: center;
       justify-content: center;
-      gap: 36px;
+      gap: 20px;
+      padding: 80px 24px 40px;
+      overflow-y: auto;
     }
     .mobile-nav.open { display: flex; }
 
     .mobile-nav a {
       font-family: 'Bebas Neue', sans-serif;
-      font-size: 2.2rem;
+      font-size: 1.6rem;
       letter-spacing: 0.08em;
       color: var(--text-primary);
       transition: color 0.3s ease;
