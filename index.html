@@ -1027,62 +1027,53 @@
       margin: 0 0 16px;
     }
 
-    /* ============================================================
-       WHATSAPP FLUTUANTE
-    ============================================================ */
-    .whatsapp-float {
-      position: fixed;
-      bottom: 32px; right: 32px;
-      z-index: 9999;
-      width: 60px; height: 60px;
-      background: var(--red);
-      border-radius: 50%;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      box-shadow: 0 4px 20px rgba(198,40,40,0.5);
-      transition: transform 0.3s ease, box-shadow 0.3s ease;
-      animation: pulseFloat 3s ease-in-out infinite;
-    }
-
-    .whatsapp-float:hover,
-    .whatsapp-float:focus-visible {
-      transform: scale(1.12);
-      box-shadow: 0 6px 28px rgba(198,40,40,0.7);
-      outline: none;
-    }
-
-    .whatsapp-float i { color: #fff; font-size: 1.75rem; }
-
-    @keyframes pulseFloat {
-      0%, 100% { box-shadow: 0 4px 20px rgba(198,40,40,0.5); }
-      50%       { box-shadow: 0 4px 36px rgba(198,40,40,0.8), 0 0 0 8px rgba(198,40,40,0.1); }
-    }
-
-    .whatsapp-float::before {
-      content: 'Fale Conosco';
-      position: absolute;
-      right: 72px; top: 50%;
-      transform: translateY(-50%);
-      background: var(--bg-3);
-      color: var(--text-primary);
-      font-family: 'Oswald', sans-serif;
-      font-size: 0.95rem;
-      letter-spacing: 0.1em;
-      white-space: nowrap;
-      padding: 6px 12px;
-      border-radius: 2px;
-      border: 1px solid var(--border);
-      opacity: 0;
-      pointer-events: none;
-      transition: opacity 0.3s ease;
-    }
-
-    .whatsapp-float:hover::before { opacity: 1; }
-
-    /* ============================================================
-       FOOTER
-    ============================================================ */
+/* ============================================================
+   WHATSAPP FLUTUANTE
+============================================================ */
+.whatsapp-float {
+  position: fixed;
+  bottom: 32px; right: 32px;
+  z-index: 9999;
+  width: 60px; height: 60px;
+  background: #25D366;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 4px 20px rgba(37,211,102,0.5);
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  animation: pulseFloat 3s ease-in-out infinite;
+}
+.whatsapp-float:hover,
+.whatsapp-float:focus-visible {
+  transform: scale(1.12);
+  box-shadow: 0 6px 28px rgba(37,211,102,0.7);
+  outline: none;
+}
+.whatsapp-float i { color: #fff; font-size: 1.75rem; }
+@keyframes pulseFloat {
+  0%, 100% { box-shadow: 0 4px 20px rgba(37,211,102,0.5); }
+  50%       { box-shadow: 0 4px 36px rgba(37,211,102,0.8), 0 0 0 8px rgba(37,211,102,0.1); }
+}
+.whatsapp-float::before {
+  content: 'Fale Conosco';
+  position: absolute;
+  right: 72px; top: 50%;
+  transform: translateY(-50%);
+  background: var(--bg-3);
+  color: var(--text-primary);
+  font-family: 'Oswald', sans-serif;
+  font-size: 0.95rem;
+  letter-spacing: 0.1em;
+  white-space: nowrap;
+  padding: 6px 12px;
+  border-radius: 2px;
+  border: 1px solid var(--border);
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.3s ease;
+}
+.whatsapp-float:hover::before { opacity: 1; }
     #footer {
       background: var(--bg-black);
       border-top: 1px solid rgba(198,40,40,0.2);
